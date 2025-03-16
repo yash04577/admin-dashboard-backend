@@ -51,20 +51,6 @@ const SalesSchema = new mongoose.Schema({
 });
 const Sales = mongoose.model('Sales', SalesSchema);
 
-// Authentication Middleware
-const authenticate = (req, res, next) => {
-    const token = req.header('Authorization');
-    console.log("token ", token)
-    if (!token) return res.status(401).send('Access Denied');
-    try {
-        const verified = jwt.verify(token, "yashkumarprajapati");
-        req.user = verified;
-        next();
-    } catch (err) {
-        res.status(400).send('Invalid Token');
-    }
-};
-
 // Register
 app.post('/register', async (req, res) => {
     const { username, password, role } = req.body;
@@ -102,20 +88,17 @@ app.get('/products', async (req, res) => {
 });
 // Product Management (Admin only)
 app.post('/products', async (req, res) => {
-    if (req.user.role !== 'admin') return res.status(403).send('Access denied');
     const product = new Product(req.body);
     await product.save();
     res.send('Product added');
 });
 
-app.put('/products/:id', authenticate, async (req, res) => {
-    if (req.user.role !== 'admin') return res.status(403).send('Access denied');
+app.put('/products/:id', async (req, res) => {
     await Product.findByIdAndUpdate(req.params.id, req.body);
     res.send('Product updated');
 });
 
-app.delete('/products/:id', authenticate, async (req, res) => {
-    if (req.user.role !== 'admin') return res.status(403).send('Access denied');
+app.delete('/products/:id', async (req, res) => {
     await Product.findByIdAndDelete(req.params.id);
     res.send('Product deleted');
 });
@@ -190,17 +173,17 @@ const insertSampleData = async () => {
             totalPending: 12,
             sales: [
               { name: "5k", sales: 25 },
-              { name: "10k", sales: 42 },
+              { name: "10k", sales: 72 },
               { name: "15k", sales: 36 },
-              { name: "20k", sales: 60 },
+              { name: "20k", sales: 30 },
               { name: "25k", sales: 44 },
-              { name: "30k", sales: 55 },
+              { name: "30k", sales: 85 },
               { name: "35k", sales: 22 },
               { name: "40k", sales: 60 },
-              { name: "45k", sales: 48 },
+              { name: "45k", sales: 28 },
               { name: "50k", sales: 52 },
               { name: "55k", sales: 49 },
-              { name: "60k", sales: 51 },
+              { name: "60k", sales: 71 },
             ],
           },
           {
@@ -210,17 +193,17 @@ const insertSampleData = async () => {
             totalOrders: 300,
             totalPending: 15,
             sales: [
-              { name: "5k", sales: 28 },
+              { name: "5k", sales: 38 },
               { name: "10k", sales: 45 },
-              { name: "15k", sales: 40 },
-              { name: "20k", sales: 65 },
+              { name: "15k", sales: 70 },
+              { name: "20k", sales: 95 },
               { name: "25k", sales: 48 },
-              { name: "30k", sales: 58 },
+              { name: "30k", sales: 68 },
               { name: "35k", sales: 25 },
               { name: "40k", sales: 62 },
-              { name: "45k", sales: 50 },
+              { name: "45k", sales: 30 },
               { name: "50k", sales: 54 },
-              { name: "55k", sales: 52 },
+              { name: "55k", sales: 92 },
               { name: "60k", sales: 53 },
             ],
           },
@@ -231,17 +214,17 @@ const insertSampleData = async () => {
             totalOrders: 320,
             totalPending: 18,
             sales: [
-              { name: "5k", sales: 30 },
-              { name: "10k", sales: 48 },
+              { name: "5k", sales: 40 },
+              { name: "10k", sales: 68 },
               { name: "15k", sales: 42 },
               { name: "20k", sales: 70 },
               { name: "25k", sales: 50 },
-              { name: "30k", sales: 60 },
+              { name: "30k", sales: 90 },
               { name: "35k", sales: 28 },
               { name: "40k", sales: 65 },
-              { name: "45k", sales: 52 },
+              { name: "45k", sales: 22 },
               { name: "50k", sales: 56 },
-              { name: "55k", sales: 54 },
+              { name: "55k", sales: 74 },
               { name: "60k", sales: 55 },
             ],
           },
@@ -254,15 +237,15 @@ const insertSampleData = async () => {
             sales: [
               { name: "5k", sales: 35 },
               { name: "10k", sales: 50 },
-              { name: "15k", sales: 45 },
+              { name: "15k", sales: 95 },
               { name: "20k", sales: 75 },
               { name: "25k", sales: 55 },
-              { name: "30k", sales: 65 },
+              { name: "30k", sales: 35 },
               { name: "35k", sales: 30 },
-              { name: "40k", sales: 68 },
+              { name: "40k", sales: 58 },
               { name: "45k", sales: 54 },
-              { name: "50k", sales: 58 },
-              { name: "55k", sales: 56 },
+              { name: "50k", sales: 28 },
+              { name: "55k", sales: 86 },
               { name: "60k", sales: 57 },
             ],
           },
@@ -273,18 +256,18 @@ const insertSampleData = async () => {
             totalOrders: 360,
             totalPending: 22,
             sales: [
-              { name: "5k", sales: 38 },
-              { name: "10k", sales: 52 },
-              { name: "15k", sales: 48 },
-              { name: "20k", sales: 78 },
-              { name: "25k", sales: 58 },
-              { name: "30k", sales: 68 },
-              { name: "35k", sales: 32 },
-              { name: "40k", sales: 70 },
-              { name: "45k", sales: 56 },
-              { name: "50k", sales: 60 },
-              { name: "55k", sales: 58 },
-              { name: "60k", sales: 59 },
+              { name: "5k", sales: 20 },
+              { name: "10k", sales: 40 },
+              { name: "15k", sales: 38 },
+              { name: "20k", sales: 64 },
+              { name: "25k", sales: 42 },
+              { name: "30k", sales: 50 },
+              { name: "35k", sales: 20 },
+              { name: "40k", sales: 58 },
+              { name: "45k", sales: 46 },
+              { name: "50k", sales: 50 },
+              { name: "55k", sales: 47 },
+              { name: "60k", sales: 49 },
             ],
           },
           {
@@ -315,18 +298,18 @@ const insertSampleData = async () => {
             totalOrders: 250,
             totalPending: 10,
             sales: [
-              { name: "5k", sales: 20 },
-              { name: "10k", sales: 40 },
-              { name: "15k", sales: 38 },
-              { name: "20k", sales: 64 },
-              { name: "25k", sales: 42 },
-              { name: "30k", sales: 50 },
-              { name: "35k", sales: 20 },
-              { name: "40k", sales: 58 },
-              { name: "45k", sales: 46 },
-              { name: "50k", sales: 50 },
-              { name: "55k", sales: 47 },
-              { name: "60k", sales: 49 },
+              { name: "5k", sales: 40 },
+              { name: "10k", sales: 68 },
+              { name: "15k", sales: 42 },
+              { name: "20k", sales: 70 },
+              { name: "25k", sales: 50 },
+              { name: "30k", sales: 90 },
+              { name: "35k", sales: 28 },
+              { name: "40k", sales: 65 },
+              { name: "45k", sales: 22 },
+              { name: "50k", sales: 56 },
+              { name: "55k", sales: 74 },
+              { name: "60k", sales: 55 },
             ],
           },
           {
@@ -357,17 +340,17 @@ const insertSampleData = async () => {
             totalOrders: 300,
             totalPending: 15,
             sales: [
-              { name: "5k", sales: 28 },
+              { name: "5k", sales: 78 },
               { name: "10k", sales: 45 },
-              { name: "15k", sales: 40 },
+              { name: "15k", sales: 30 },
               { name: "20k", sales: 65 },
-              { name: "25k", sales: 48 },
+              { name: "25k", sales: 78 },
               { name: "30k", sales: 58 },
               { name: "35k", sales: 25 },
-              { name: "40k", sales: 62 },
-              { name: "45k", sales: 50 },
+              { name: "40k", sales: 82 },
+              { name: "45k", sales: 20 },
               { name: "50k", sales: 54 },
-              { name: "55k", sales: 52 },
+              { name: "55k", sales: 72 },
               { name: "60k", sales: 53 },
             ],
           },
@@ -384,11 +367,11 @@ const insertSampleData = async () => {
               { name: "20k", sales: 70 },
               { name: "25k", sales: 50 },
               { name: "30k", sales: 60 },
-              { name: "35k", sales: 28 },
+              { name: "35k", sales: 88 },
               { name: "40k", sales: 65 },
               { name: "45k", sales: 52 },
               { name: "50k", sales: 56 },
-              { name: "55k", sales: 54 },
+              { name: "55k", sales: 94 },
               { name: "60k", sales: 55 },
             ],
           },
@@ -402,13 +385,13 @@ const insertSampleData = async () => {
               { name: "5k", sales: 35 },
               { name: "10k", sales: 50 },
               { name: "15k", sales: 45 },
-              { name: "20k", sales: 75 },
+              { name: "20k", sales: 25 },
               { name: "25k", sales: 55 },
               { name: "30k", sales: 65 },
-              { name: "35k", sales: 30 },
+              { name: "35k", sales: 80 },
               { name: "40k", sales: 68 },
-              { name: "45k", sales: 54 },
-              { name: "50k", sales: 58 },
+              { name: "45k", sales: 44 },
+              { name: "50k", sales: 78 },
               { name: "55k", sales: 56 },
               { name: "60k", sales: 57 },
             ],
